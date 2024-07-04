@@ -159,7 +159,8 @@ SELECT f.name AS facility_name, SUM(CASE
 
 
 /* Q11: Produce a report of members and who recommended them in alphabetic surname,firstname order */
---ANSWER: SELECT m1.surname AS member_surname, m1.firstname AS member_firstname,
+--ANSWER:
+SELECT m1.surname AS member_surname, m1.firstname AS member_firstname,
     m2.surname AS recommended_surname, m2.firstname AS recommended_firstname
     FROM Members AS m1
     LEFT JOIN Members AS m2
@@ -168,7 +169,8 @@ SELECT f.name AS facility_name, SUM(CASE
 
 
 /* Q12: Find the facilities with their usage by member, but not guests */
---ANSWER: SELECT f.name AS facility_name, SUM(CASE
+--ANSWER:
+SELECT f.name AS facility_name, SUM(CASE
                                         WHEN b.memid != 0 THEN b.slots
                                         ELSE 0
                                     END) AS member_usage
@@ -179,7 +181,8 @@ SELECT f.name AS facility_name, SUM(CASE
 
 
 /* Q13: Find the facilities usage by month, but not guests */
---ANSWER: SELECT name AS facility, EXTRACT(MONTH FROM starttime) AS month,
+--ANSWER:
+SELECT name AS facility, EXTRACT(MONTH FROM starttime) AS month,
     COUNT(memid) AS monthly_usage
     FROM Bookings AS b
     INNER JOIN Facilities as f
