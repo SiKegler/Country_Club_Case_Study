@@ -34,32 +34,37 @@ exploring the data, and getting acquainted with the 3 tables. */
 /* QUESTIONS 
 /* Q1: Some of the facilities charge a fee to members, but some do not.
 Write a SQL query to produce a list of the names of the facilities that do. */
---A: SELECT name FROM Facilities WHERE membercost > 0;
+--ANSWER: 
+SELECT name FROM Facilities WHERE membercost > 0;
 
 
 /* Q2: How many facilities do not charge a fee to members? */
---A: SELECT COUNT(name) FROM Facilities WHERE membercost = 0;   
+--ANSWER:
+SELECT COUNT(name) FROM Facilities WHERE membercost = 0;   
 
 
 /* Q3: Write an SQL query to show a list of facilities that charge a fee to members,
 where the fee is less than 20% of the facility's monthly maintenance cost.
 Return the facid, facility name, member cost, and monthly maintenance of the
 facilities in question. */
---A: SELECT facid, name, membercost, monthlymaintenance
+--ANSWER:
+SELECT facid, name, membercost, monthlymaintenance
     FROM Facilities
     WHERE membercost < 0.2 * monthlymaintenance;
 
 
 /* Q4: Write an SQL query to retrieve the details of facilities with ID 1 and 5.
 Try writing the query without using the OR operator. */
---A: SELECT * FROM Facilities WHERE facid IN (1, 5);
+--ANSWER:
+SELECT * FROM Facilities WHERE facid IN (1, 5);
 
 
 /* Q5: Produce a list of facilities, with each labelled as
 'cheap' or 'expensive', depending on if their monthly maintenance cost is
 more than $100. Return the name and monthly maintenance of the facilities
 in question. */
---A: SELECT name, monthlymaintenance,
+--ANSWER:
+SELECT name, monthlymaintenance,
     CASE
         WHEN monthlymaintenance > 100 THEN 'expensive'
         ELSE 'cheap'
@@ -69,7 +74,8 @@ in question. */
 
 /* Q6: You'd like to get the first and last name of the last member(s)
 who signed up. Try not to use the LIMIT clause for your solution. */
---A: SELECT firstname, surname
+--ANSWER:
+SELECT firstname, surname
     FROM Members
     WHERE joindate = (SELECT MAX(joindate) FROM Members);
 
@@ -78,7 +84,8 @@ who signed up. Try not to use the LIMIT clause for your solution. */
 Include in your output the name of the court, and the name of the member
 formatted as a single column. Ensure no duplicate data, and order by
 the member name. */
---A: SELECT DISTINCT CONCAT(m.firstname, ' ', m.surname) AS member_name, f.name AS facility_name
+--ANSWER:
+SELECT DISTINCT CONCAT(m.firstname, ' ', m.surname) AS member_name, f.name AS facility_name
     FROM Members AS m
     JOIN Bookings AS b
     ON m.memid = b.memid
@@ -94,7 +101,8 @@ different costs to members (the listed costs are per half-hour 'slot'), and
 the guest user's ID is always 0. Include in your output the name of the
 facility, the name of the member formatted as a single column, and the cost.
 Order by descending cost, and do not use any subqueries. */
---A: SELECT f.name AS facility_name, CONCAT(m.firstname, ' ', m.surname) AS member_name,
+--ANSWER:
+SELECT f.name AS facility_name, CONCAT(m.firstname, ' ', m.surname) AS member_name,
     CASE
         WHEN b.memid = 0 THEN f.guestcost * b.slots
         ELSE f.membercost * b.slots
@@ -110,7 +118,8 @@ Order by descending cost, and do not use any subqueries. */
 
 
 /* Q9: This time, produce the same result as in Q8, but using a subquery. */
---A: SELECT facility_name, member_name, cost
+--ANSWER:
+SELECT facility_name, member_name, cost
     FROM (SELECT f.name AS facility_name, CONCAT(m.firstname, ' ', m.surname) AS member_name,
             CASE
                 WHEN b.memid = 0 THEN f.guestcost * b.slots
@@ -126,6 +135,7 @@ Order by descending cost, and do not use any subqueries. */
     ORDER BY cost DESC;
 
 
+
 /* PART 2: SQLite
 
 Export the country club data from PHPMyAdmin, and connect to a local SQLite instance from Jupyter notebook 
@@ -135,7 +145,8 @@ QUESTIONS:
 /* Q10: Produce a list of facilities with a total revenue less than 1000.
 The output of facility name and total revenue, sorted by revenue. Remember
 that there's a different cost for guests and members! */
---A: SELECT f.name AS facility_name, SUM(CASE
+--ANSWER:
+SELECT f.name AS facility_name, SUM(CASE
                                         WHEN b.memid = 0 THEN f.guestcost * b.slots
                                         ELSE f.membercost * b.slots
                                     END) AS total_revenue
@@ -148,7 +159,7 @@ that there's a different cost for guests and members! */
 
 
 /* Q11: Produce a report of members and who recommended them in alphabetic surname,firstname order */
---A: SELECT m1.surname AS member_surname, m1.firstname AS member_firstname,
+--ANSWER: SELECT m1.surname AS member_surname, m1.firstname AS member_firstname,
     m2.surname AS recommended_surname, m2.firstname AS recommended_firstname
     FROM Members AS m1
     LEFT JOIN Members AS m2
@@ -157,7 +168,7 @@ that there's a different cost for guests and members! */
 
 
 /* Q12: Find the facilities with their usage by member, but not guests */
---A: SELECT f.name AS facility_name, SUM(CASE
+--ANSWER: SELECT f.name AS facility_name, SUM(CASE
                                         WHEN b.memid != 0 THEN b.slots
                                         ELSE 0
                                     END) AS member_usage
@@ -168,7 +179,7 @@ that there's a different cost for guests and members! */
 
 
 /* Q13: Find the facilities usage by month, but not guests */
---A: SELECT name AS facility, EXTRACT(MONTH FROM starttime) AS month,
+--ANSWER: SELECT name AS facility, EXTRACT(MONTH FROM starttime) AS month,
     COUNT(memid) AS monthly_usage
     FROM Bookings AS b
     INNER JOIN Facilities as f
